@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 // 4. Ana route'u (/) tanımlıyoruz.
 //    Birisi web sitemizin ana adresine GET isteği attığında ne olacağını söylüyoruz.
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.send("API is running....");
 });
 
 // 5. Sunucuyu belirlediğimiz portta dinlemeye başlatıyoruz

@@ -1,8 +1,11 @@
 require("dotenv").config();
 const express = require("express");
+const connectDB = require("./config/db");
+
+connectDB();
+const authRoutes = require("./routes/authRoutes");
 
 // 1. Rota dosyalarını içeri aktarıyoruz (SENDE EKSİK OLAN KISIM)
-const authRoutes = require("./routes/authRoutes");
 const configRoutes = require("./routes/configRoutes");
 
 const app = express();

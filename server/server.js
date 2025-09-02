@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const configRoutes = require("./routes/configRoutes");
 
 const app = express();
+app.use(express.json());
 
 const PORT = process.env.PORT;
 

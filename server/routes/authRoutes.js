@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs"); // bcryptjs'i içeri aktar
+const jwt = require("jsonwebtoken");
 const User = require("../models/User"); // User modelimizi içeri aktar
 
 // @route   POST api/auth/register
@@ -50,9 +51,50 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login rotası şimdilik aynı kalabilir
-router.post("/login", (req, res) => {
-  res.send("Login Route");
-});
+// @route   POST api/auth/login
+// @desc    Kullanıcı girişi ve token alınması
+// @access  Public
+router.post("/login", async (req, res) => {
+  // 1. Gelen istekten email ve şifreyi al
+  const { email, password } = req.body;
 
+  try {
+    // 2. Kullanıcının email adresine göre veritabanında var olup olmadığını kontrol et
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "Geçersiz kullanıcı bilgileri" });
+    }
+
+    // 3. Girilen şifre ile veritabanındaki hash'lenmiş şifreyi karşılaştır
+    // bcrypt.compare() bu işi güvenli bir şekilde yapar.
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Geçersiz kullanıcı bilgileri" });
+      // Güvenlik için "şifre yanlış" gibi spesifik bir mesaj vermiyoruz.
+    }
+
+    // 4. Şifre doğruysa, JWT oluştur
+    // Token'ın içine gömeceğimiz bilgi (payload). Asla şifre gibi hassas bilgileri koyma!
+    const payload = {
+      user: {
+        id: user.id, // Veritabanındaki kullanıcı ID'si
+      },
+    };
+
+    // Token'ı imzala
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET, // .env dosyasındaki gizli anahtarımız
+      { expiresIn: "5h" }, // Token'ın geçerlilik süresi (örneğin 5 saat)
+      (err, token) => {
+        if (err) throw err;
+        // 5. Oluşturulan token'ı kullanıcıya geri gönder
+        res.json({ token });
+      }
+    );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Sunucu Hatası");
+  }
+});
 module.exports = router;

@@ -1,11 +1,13 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import authReducer from "./authReducer";
 import axios from "axios";
+import setAuthToken from "../utils/setAuthToken";
 
 // Başlangıç durumu
 const initialState = {
   token: localStorage.getItem("token"), // Uygulama yüklenirken token'ı localStorage'dan al
   isAuthenticated: null,
+  user: null,
 };
 
 // Context'i oluştur
@@ -14,7 +16,14 @@ export const AuthContext = createContext(initialState);
 // Provider Bileşeni (Tüm uygulamayı sarmalayacak)
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
+  // useEffect kullanarak token her değiştiğinde kontrol yap
+  useEffect(() => {
+    if (state.token) {
+      setAuthToken(state.token);
+    } else {
+      setAuthToken(null);
+    }
+  }, [state.token]);
   // Eylemler (Actions) - Bileşenlerin çağıracağı fonksiyonlar
 
   // Giriş Yap
@@ -40,6 +49,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         token: state.token,
         isAuthenticated: state.isAuthenticated,
+        user: state.user, // Değeri dışarıya aç
         login,
         logout,
       }}

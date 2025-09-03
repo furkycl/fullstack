@@ -1,29 +1,17 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// Yeni bileşenlerimizi import ediyoruz
+import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
-// Sayfaları import ediyoruz
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import DashboardPage from "./pages/DashboardPage";
-
+import AnimatedRoutes from "./components/AnimatedRoutes"; // Yeni bileşeni import et
 import "./App.css";
 
 function App() {
   return (
     <Router>
-      {/* div.App yerine React Fragment (<>) kullanarak gereksiz div'den kurtulabiliriz */}
       <>
         <Navbar />
         <main className="container">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-          </Routes>
+          {/* Eski <Routes> bloğunun tamamı yerine bu tek satır geldi */}
+          <AnimatedRoutes />
         </main>
         <Footer />
       </>

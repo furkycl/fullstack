@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react"; // useContext'i import et
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // AuthContext'i import et
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const { login } = useContext(AuthContext); // Context'ten login fonksiyonunu al
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
   const { email, password } = formData;
 
   const onChange = (e) =>
@@ -18,20 +15,13 @@ const LoginPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
-      const user = {
-        email,
-        password,
-      };
+      // Artık doğrudan context'teki login fonksiyonunu çağırıyoruz
+      await login({ email, password });
 
-      const res = await axios.post("/api/auth/login", user);
-
-      // BAŞARILI GİRİŞ! Token'ı aldık.
-      console.log(res.data.token); // Şimdilik sadece konsola yazdıralım
-
-      // BİR SONRAKİ ADIMDA: Token'ı kaydedip kullanıcıyı Dashboard'a yönlendireceğiz.
-      // navigate('/dashboard');
+      // Giriş başarılı olduğunda AuthContext durumu güncelleyecek.
+      // Kullanıcıyı dashboard'a yönlendiriyoruz.
+      navigate("/dashboard");
     } catch (err) {
       setError(
         err.response?.data?.msg ||
@@ -40,6 +30,7 @@ const LoginPage = () => {
     }
   };
 
+  // Form kısmı aynı kalıyor...
   return (
     <div>
       <h1>Giriş Yap</h1>

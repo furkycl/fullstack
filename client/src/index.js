@@ -1,17 +1,17 @@
 import React from "react";
-// Hatalı 'client-dom/client' yerine doğru olan 'react-dom/client' kullanılıyor
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { AuthProvider } from "./context/AuthContext"; // <-- Import et
 
-// 'root' elementini seçiyoruz
-const rootElement = document.getElementById("root");
-// Yeni API'yi kullanarak root'u oluşturuyoruz
-const root = ReactDOM.createRoot(rootElement);
-
-// Uygulamayı render ediyoruz
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      {" "}
+      {/* <-- Başına ekle */}
+      <App />
+    </AuthProvider>{" "}
+    {/* <-- Sonuna ekle */}
   </React.StrictMode>
 );

@@ -1,28 +1,25 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors"); // <-- 1. BU SATIRI EKLE
 const connectDB = require("./config/db");
 
 connectDB();
-const authRoutes = require("./routes/authRoutes");
 
-// 1. Rota dosyalarını içeri aktarıyoruz (SENDE EKSİK OLAN KISIM)
+const authRoutes = require("./routes/authRoutes");
 const configRoutes = require("./routes/configRoutes");
 
 const app = express();
+
+// Middlewares
+app.use(cors()); // <-- 2. BU SATIRI EKLE (express.json'dan sonra veya önce olabilir, rotalardan önce olması önemli)
 app.use(express.json());
+
+// Rotalar
+app.use("/api/auth", authRoutes);
+app.use("/api/configs", configRoutes);
 
 const PORT = process.env.PORT;
 
-// 2. ROTALARI UYGULAMAYA TANITIYORUZ (SENDE EKSİK OLAN KISIM)
-// Bu satırlar birer "middleware" (ara yazılım) görevi görür.
-// Gelen istekleri, URL'nin başlangıcına göre ilgili rota dosyasına yönlendirirler.
-//
-// '/api/auth' ile başlayan tüm istekler artık authRoutes dosyası tarafından yönetilecek.
-app.use("/api/auth", authRoutes);
-// '/api/configs' ile başlayan tüm istekler ise configRoutes dosyası tarafından yönetilecek.
-app.use("/api/configs", configRoutes);
-
-// Ana ('/') rotası. Genellikle en sonda veya diğer rotalardan ayrı durur.
 app.get("/", (req, res) => {
   res.send("API is running...");
 });

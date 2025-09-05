@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { toast } from 'react-toastify'; // Yorumda kalsın
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +9,9 @@ const RegisterPage = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate(); // <-- EKSİK OLAN SATIR
 
-  // EKSİK OLAN DEĞİŞKEN TANIMLAMALARI
+  const navigate = useNavigate();
+
   const { username, email, password } = formData;
 
   const onChange = (e) =>
@@ -20,15 +19,13 @@ const RegisterPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (password.length < 6) {
-      setError("Şifre en az 6 karakter olmalıdır");
+      toast.error("Şifre en az 6 karakter olmalıdır");
       return;
     }
 
     try {
-      // EKSİK OLAN DEĞİŞKEN TANIMLAMASI
       const newUser = {
         username,
         email,
@@ -37,9 +34,14 @@ const RegisterPage = () => {
 
       await axios.post("/api/auth/register", newUser);
 
-      navigate("/login");
+      toast.success("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
+
+      // Yönlendirmeden önce bildirimin görünmesi için küçük bir gecikme eklemek iyi bir UX pratiğidir
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500); // 1.5 saniye sonra yönlendir
     } catch (err) {
-      setError(
+      toast.error(
         err.response?.data?.msg || "Bir hata oluştu. Lütfen tekrar deneyin."
       );
     }
@@ -48,7 +50,6 @@ const RegisterPage = () => {
   return (
     <div>
       <h1>Kayıt Ol</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={onSubmit}>
         <div>
           <input

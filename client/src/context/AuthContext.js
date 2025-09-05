@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (formData) => {
     try {
       const res = await axios.post(
-        "https://fullstack-git-main-furkycls-projects.vercel.app/api/auth/login",
+        "https://fullstack-xi-khaki.vercel.app/api/auth/login",
         formData
       );
       dispatch({

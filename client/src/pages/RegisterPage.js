@@ -33,7 +33,7 @@ const RegisterPage = () => {
       };
 
       await axios.post(
-        "https://fullstack-git-main-furkycls-projects.vercel.app/api/auth/register",
+        "https://fullstack-xi-khaki.vercel.app/api/auth/register",
         newUser
       );
 

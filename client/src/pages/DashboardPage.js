@@ -18,7 +18,7 @@ const DashboardPage = () => {
       try {
         // Token, setAuthToken sayesinde isteğe otomatik eklenecek
         const res = await axios.get(
-          "https://fullstack-git-main-furkycls-projects.vercel.app/api/configs"
+          "https://fullstack-xi-khaki.vercel.app/api/configs"
         );
         setConfigs(res.data);
       } catch (err) {

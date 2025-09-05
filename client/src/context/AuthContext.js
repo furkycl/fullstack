@@ -29,7 +29,10 @@ export const AuthProvider = ({ children }) => {
   // Giriş Yap
   const login = async (formData) => {
     try {
-      const res = await axios.post("/api/auth/login", formData);
+      const res = await axios.post(
+        "https://fullstack-git-main-furkycls-projects.vercel.app/api/auth/login",
+        formData
+      );
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: res.data, // res.data = { token: '...' }

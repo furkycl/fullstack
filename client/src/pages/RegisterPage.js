@@ -32,7 +32,10 @@ const RegisterPage = () => {
         password,
       };
 
-      await axios.post("/api/auth/register", newUser);
+      await axios.post(
+        "https://fullstack-git-main-furkycls-projects.vercel.app/api/auth/register",
+        newUser
+      );
 
       toast.success("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+// import { toast } from 'react-toastify'; // Yorumda kalsın
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +10,9 @@ const RegisterPage = () => {
     password: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // <-- EKSİK OLAN SATIR
 
+  // EKSİK OLAN DEĞİŞKEN TANIMLAMALARI
   const { username, email, password } = formData;
 
   const onChange = (e) =>
@@ -18,7 +20,7 @@ const RegisterPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Önceki hataları temizle
+    setError("");
 
     if (password.length < 6) {
       setError("Şifre en az 6 karakter olmalıdır");
@@ -26,20 +28,17 @@ const RegisterPage = () => {
     }
 
     try {
+      // EKSİK OLAN DEĞİŞKEN TANIMLAMASI
       const newUser = {
         username,
         email,
         password,
       };
 
-      // Backend API'mize POST isteği gönderiyoruz
-      // Not: package.json'a proxy ekleyince '/api/auth/register' olarak kısaltacağız
       await axios.post("/api/auth/register", newUser);
 
-      // Kayıt başarılıysa, kullanıcıyı giriş sayfasına yönlendir
       navigate("/login");
     } catch (err) {
-      // err.response.data backend'den gelen JSON hatasını içerir (örn: {msg: '...'})
       setError(
         err.response?.data?.msg || "Bir hata oluştu. Lütfen tekrar deneyin."
       );
